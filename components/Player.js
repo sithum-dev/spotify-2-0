@@ -4,7 +4,19 @@ import { currentTrackIdState, isPlayingState } from "../atoms/songAtom";
 import { useRecoilState } from "recoil";
 import { useEffect, useState } from "react";
 import useSongInfo from "../hooks/useSongInfo";
-import { ArrowPathIcon, PlayCircleIcon } from "@heroicons/react/24/solid";
+import {
+  ArrowPathIcon,
+  PlayCircleIcon,
+  BackwardIcon,
+  PauseCircleIcon,
+  ForwardIcon,
+  SpeakerWaveIcon as VolumeUpIcon,
+  ArrowUturnLeftIcon,
+} from "@heroicons/react/24/solid";
+import {
+  HeartIcon,
+  SpeakerWaveIcon as VolumeDownIcon,
+} from "@heroicons/react/24/outline";
 
 function Player() {
   const spotifyApi = useSpotify();
@@ -29,6 +41,18 @@ function Player() {
     }
   };
 
+  const handlePlayPause = () => {
+    spotifyApi.getMyCurrentPlaybackState().then((data) => {
+      if (data.body.is_playing) {
+        spotifyApi.pause();
+        setIsPlaying(false);
+      } else {
+        spotifyApi.play();
+        setIsPlaying(true);
+      }
+    });
+  };
+
   useEffect(() => {
     if (spotifyApi.getAccessToken() && !currentTrackId) {
       fetchCurruntSong();
@@ -49,8 +73,22 @@ function Player() {
         </div>
       </div>
 
-      <div>
-        <ArrowPathIcon className="w-5 h-5" />
+      <div className="flex items-center justify-evenly">
+        <ArrowPathIcon className="button" />
+        <BackwardIcon className="button" />
+        {isPlaying ? (
+          <PauseCircleIcon
+            onClick={handlePlayPause}
+            className="button !w-10 !h-10"
+          />
+        ) : (
+          <PlayCircleIcon
+            onClick={handlePlayPause}
+            className="button !w-10 !h-10"
+          />
+        )}
+        <ForwardIcon className="button" />
+        <ArrowUturnLeftIcon className="button" />
       </div>
     </div>
   );
