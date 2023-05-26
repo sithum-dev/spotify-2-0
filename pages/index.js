@@ -10,6 +10,7 @@ export default function Home() {
     <div className="bg-black h-screen overflow-hidden">
       <Head>
         <title>Spotify 2.0</title>
+        <link rel="shortcut icon" href="./favicon.png" />
       </Head>
 
       <main className="flex">
